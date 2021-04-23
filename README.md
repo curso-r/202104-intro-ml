@@ -74,14 +74,12 @@ Fora do horário de aula ou monitoria:
 
 Referências extras comentadas nas aulas.
 
-| Aula | Tema | Descrição |
-|:-----|:-----|:----------|
-
 Materiais que comentamos quando tiramos dúvidas (não necessariamente são
 relacionadas com o conteúdo da aula).
 
-| Aula | Tema | Descrição |
-|:-----|:-----|:----------|
+## Dependências
+
+Este curso utiliza as seguintes dependências além do R e do RStudio:
 
 ## Redes sociais da Curso-R
 
