@@ -8,7 +8,7 @@ library(vip)
 # Dados -------------------------------------------------------------------
 data("diamonds")
 
-# EAD ---------------------------------------------------------------------
+# EDA ---------------------------------------------------------------------
 # glimpse(diamonds)
 # skim(diamonds)
 # GGally::ggpairs(diamonds)
@@ -162,14 +162,3 @@ saveRDS(diamonds_final_model, file = "diamonds_final_model.rds")
 
 # guardar o modelo para usar depois ---------------------------------------
 # saveRDS(diamonds_final_lr_model, file = "diamonds_final_lr_model.rds")
-
-
-
-
-
-# 3. [desafio] Ajuste uma árvore de decisão, agora com todas as variáveis, 
-# e compare:
-# (a) se as variáveis mais importantes são as mesmas.
-# (b) se o desempenho da árvore supera o do LASSO em termos de RMSE.
-# Dica: Siga as mesmas etapas, apenas mudando onde necessário.
-

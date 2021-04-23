@@ -84,19 +84,15 @@ class: middle, center, inverse
 
 - Modelagem preditiva é um framework de análise de dados que visa gerar a estimativa mais precisa possível para uma quantidade ou fenômeno (Max Kuhn, 2014).
 
----
+<!-- --- -->
 
-## O que é Machine Learning?
+<!-- ## O que é Machine Learning? -->
 
-**Objetivo**: Fazer com que computadores consigam contruir um programa (isso mesmo!) que replique o comportamento observado em exemplos, também chamados de **dados**. Esse programa normalmente é chamado de **modelo**.
+<!-- **Objetivo**: Fazer com que computadores consigam contruir um programa (isso mesmo!) que replique o comportamento observado em exemplos, também chamados de **dados**. Esse programa normalmente é chamado de **modelo**. -->
 
-O procedimento que o computador executa para então estar apto a replicar o comportamento observado nos dados é usualmente chamado de **algoritmo**. 
+<!-- O procedimento que o computador executa para então estar apto a replicar o comportamento observado nos dados é usualmente chamado de **algoritmo**.  -->
 
-Exemplo: O Fabeook usa um **algoritmo** para que um computador seja capaz de sugerir páginas interessantes para os seus usuários. Para tal, os **dados** são processados e o resultado final é um programa que, recebendo os dados de um usuário, devolve de quais páginas ele vai gostar. Nesse exemplo, o uso do **algoritmo** fez com que o computador construísse um **modelo**.
-
----
-
-<img src="https://wordstream-files-prod.s3.amazonaws.com/s3fs-public/styles/simple_image/public/images/machine-learning1.png?Q_SmWhhhAEOO_32HNjPhcxsPhreWV26o&itok=yjEJbEKD" style="display: block; margin-left: auto; margin-right: auto;"></img>
+<!-- Exemplo: O Fabeook usa um **algoritmo** para que um computador seja capaz de sugerir páginas interessantes para os seus usuários. Para tal, os **dados** são processados e o resultado final é um programa que, recebendo os dados de um usuário, devolve de quais páginas ele vai gostar. Nesse exemplo, o uso do **algoritmo** fez com que o computador construísse um **modelo**. -->
 
 ---
 
@@ -130,7 +126,7 @@ adv_ok %>%
   facet_wrap(~midia, scales = "free")
 ```
 
-* PERGUNTA: Como investimento em propaganda influencia nas vendas?
+* PERGUNTA 1: Se eu investir X em propaganda numa certa mídia, quanto vou vender?
 
 ---
 
@@ -149,13 +145,14 @@ adv_ok %>%
   facet_wrap(~midia, scales = "free")
 ```
 
-* PERGUNTA: Como investimento em propaganda influencia nas vendas?
+* PERGUNTA 1: Se eu investir X em propaganda numa certa mídia, quanto vou vender?
+* PERGUNTA 2: Um computador pode captar essa influência?
 
 ---
 
 # Machine Learning 
 
-Matematicamente, queremos encontrar uma função $f()$ (**modelo**) tal que:
+Matematicamente, queremos que o computador encontre uma função $f()$ (**modelo**) tal que:
 
 <img src="static/img/y_fx.png" style="position: fixed; width: 40%; top: 250px; left: 300px;">
 
@@ -199,6 +196,49 @@ grafico_sem_curva +
 ```{r, fig.width = 12, fig.height = 5}
 grafico_curva_arvore
 ```
+
+---
+
+# Por que ajustar uma f?
+
+* Predição
+* Inferência
+
+## Inferência
+
+Em inferência estamos mais interessados em entender a relação entre as variáveis que conseguimos alterar (o investimento $X$) e a variável que queremos prever (a venda $Y$).
+
+Por exemplo:
+
+* Quais são as variáveis que estão mais relacionadas com a respostas?
+* Qual a relação entre a resposta e cada um dos preditores?
+
+
+Neste curso, vamos falar principalmente sobre **predição**.
+
+---
+
+# Por que ajustar uma f?
+
+* Predição
+* Inferência
+
+## Predição
+
+Em muitas situações $X$ está disponível facilmente mas, $Y$ não é fácil de descobrir. (Ou mesmo não é possível descobrí-lo).
+
+$$\hat{Y} = \hat{f}(X)$$
+é uma boa estimativa.
+Neste caso não estamos interessados em como é a estrutura $\hat{f}$ desde que ela apresente predições boas para $Y$.
+
+---
+
+background-image: url(static/img/usos_do_ml.png)
+background-position: left 140px
+background-size: contain
+
+
+# Por que ajustar uma f?
 
 ---
 
@@ -318,51 +358,6 @@ adv_ok %>%
 
 ---
 
-# Por que ajustar uma f?
-
-* Predição
-* Inferência
-
-## Predição
-
-Em muitas situações X está disponível facilmente mas, Y não é fácil de descobrir. (Ou mesmo não é possível descobrí-lo).
-
-$$\hat{Y} = \hat{f}(X)$$
-é uma boa estimativa.
-Neste caso não estamos interessados em como é a estrutura $\hat{f}$ desde que ela apresente predições boas para $Y$.
-
----
-
-# Por que ajustar uma f?
-
-* Predição
-* Inferência
-
-## Inferência
-
-Em inferência estamos mais interessados em entender a relação entre as variáveis explciativas $X$ e a variável resposta $Y$.
-
-Por exemplo:
-
-* Quais são as variáveis que estão mais relacionadas com a respostas?
-* Qual a relação entre a resposta e cada um dos preditores?
-
-
-Neste curso, vamos falar principalmente sobre **predição**.
-
----
-
-background-image: url(static/img/usos_do_ml.png)
-background-position: left 140px
-background-size: contain
-
-
-# Por que ajustar uma f?
-
-
-
----
-
 # Modo - Regressão e Classificação
 
 Existem dois principais tipos de problemas em Machine Learning:
@@ -397,6 +392,10 @@ __Y__ é uma variável categórica.
 
 ---
 
+
+<img src="https://wordstream-files-prod.s3.amazonaws.com/s3fs-public/styles/simple_image/public/images/machine-learning1.png?Q_SmWhhhAEOO_32HNjPhcxsPhreWV26o&itok=yjEJbEKD" style="display: block; margin-left: auto; margin-right: auto;"></img>
+
+---
 
 # Métricas
 

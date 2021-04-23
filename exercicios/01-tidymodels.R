@@ -7,8 +7,11 @@ library(rpart.plot)
 library(ISLR)
 
 # dados ------------------------------------------------------------------
-View(Hitters)
-help(Hitters)
+
+# retire os comentários do código abaixo para visulizar e obter informações sobre a base de dados
+
+#View(Hitters)
+#help(Hitters)
 
 
 # exercício 1 -------------------------------------------------------------
@@ -17,20 +20,16 @@ help(Hitters)
 # Curiosidade (veremos depois): tree_depth é a profundidade máxima da árvore.
 # Dicas: decision_tree(), set_engine(), set_mode().
 
-
-
 # exercicio 2 -------------------------------------------------------------
 # a) Usando a base Hitters, ajuste o modelo de árvore para os 'HmRun' (Home Runs em 1986) 
 # de cada jogador usando como variável explicativa 'CHmRun' (o número de Home Runs que ele fez na vida).
 # Dicas: fit(), uma fórmula e um data.frame.
 
 
-
 # b) use rpart.plot(ajuste$fit) para visualizar a sua árvore. O que a intensidade
 # da cor azul informa?
 # OBS: troque o nome do objeto 'ajuste' para o nome do objeto que você
 # criou em (a). Por exemplo: rpart.plot(hitters_ajuste$fit)
-
 
 
 # exercicio 3 --------------------------------------------------------------
