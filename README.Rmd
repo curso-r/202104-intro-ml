@@ -104,7 +104,7 @@ readxl::read_excel("referencias_extras.xlsx") %>%
 
 Este curso utiliza as seguintes dependências além do R e do RStudio:
 
-```{r, eval = FALSE}
+```{r, eval = FALSE, echo = TRUE}
 install.packages('tidyverse')
 install.packages('tidymodels')
 install.packages('rmarkdown')
