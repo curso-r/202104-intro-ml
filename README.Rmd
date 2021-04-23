@@ -2,63 +2,112 @@
 output: github_document
 ---
 
-# Introdução ao Machine Learning
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  echo = FALSE
+)
+
+library(magrittr)
+
+main_repo <- "main-intro-ml"
+turma <- "202104-intro-ml"
+num_aula <- 1
+```
+
+## Referências do curso
+
+[Clique aqui](https://github.com/curso-r/202104-intro-ml/raw/master/material_do_curso.zip) para baixar o material do curso.
+
+### Programação em R
+
+- [Livro da Curso-R (Curso-R)](https://livro.curso-r.com/)
+- [Tidyverse (Wickham H)](https://www.tidyverse.org/)
+- [R for Data Science (Wickham H)](https://r4ds.had.co.nz/)
+- [Advanced R (Wickham H)](https://adv-r.hadley.nz/)
+
+### Machine Learning
+
+- [Introduction to Statistical Learning (Hastie, et al)](http://faculty.marshall.usc.edu/gareth-james/ISL/ISLR%20Seventh%20Printing.pdf)
+- [Elements of Statistical Learning (Hastie, et al)](https://web.stanford.edu/~hastie/Papers/ESLII.pdf)
+- [Computer Age Statistical Inference (Hastie, Efron)](https://web.stanford.edu/~hastie/CASI_files/PDF/casi.pdf)
+- [Tidymodels (Kuhn, et al)](https://www.tmwr.org/)
+- [Feature Engineering and Selection: A Practical Approach for Predictive Models (Kuhn, Kjell)](http://www.feat.engineering/)
+- [Kaggle](https://www.kaggle.com/)
+
+### Miscelânea
+
+- [Tidytext (Silges, et al)](https://www.tidytextmining.com/)
+
+- Nosso blog: [https://curso-r.com/blog/](https://curso-r.com/blog/)
+
+## Dúvidas
+
+Fora do horário de aula ou monitoria:
+
+- perguntas gerais sobre o curso deverão ser feitas no Classroom.
+
+- perguntas sobre R, principalmente as que envolverem código, deverão ser enviadas no [nosso fórum](https://discourse.curso-r.com/).
+
+## Slides
+
+```{r}
+knitr::kable(
+  tibble::tibble(
+    slide = CursoRutils:::list_github_files(main_repo, "slides/", "\\.html"),
+    link = paste0("https://curso-r.github.io/", main_repo, "/", slide)
+  ) %>% 
+    dplyr::filter(!stringr::str_detect(slide, "_files/"))
 )
 ```
 
-Repositório principal do curso Introdução ao Machine Learning.
 
-Inscreva-se no curso: https://www.curso-r.com/cursos/intro-machine-learning
+## Scripts utilizados em aula
 
-**Acesse o material completo do curso escolhendo uma das turmas abaixo**.
-
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
-knitr::kable(CursoR:::listar_turmas_recentes("intro-ml"))
+```{r}
+pasta <- "exemplos/"
+knitr::kable(
+  tibble::tibble(
+    script = list.files(pasta, pattern = "R$"),
+    link = paste0("https://curso-r.github.io/", turma, "/", pasta, script)
+  ) 
+)
 ```
 
-# Ementa
+## Material extra
 
-- **O que é Machine Learning**
-  - História
-  - O que é modelagem preditiva
-  - Definições e Nomenclaturas
-  - Por que e quando usar
-  - Métricas e Funções de Custo
-- **Conceitos Centrais**
-  - Overfitting
-  - Hiperparâmetros
-  - Bases de Treino/Teste/Validação
-  - Cross-Validation
-  - Relação Viés-Variância
-- **Modelos de Regressão**
-  - Regressão Linar
-  - RMSE, MAPE, R2.
-  - Gradient Descent
-  - Estimadores e estimativas
-  - Regularização LASSO
-  - Principais cuidados com os dados
-- **Modelos de Classificação**
-  - Regressão Logística
-  - Binary Cross-entropy (Deviance)
-  - Probabilidades vs Classes
-  - Matriz de Confusão
-  - Curva ROC
-  - Acurácia, recall, precisão, F1, AUROC.
-- **Modelos de Árvores**
-  - Árvores de decisão
-  - GINI e Entropia
-  - Ganho de Informação
-  - Random Forest
-  - Gradient Boosting (XGBoost)
-- **Tidymodels**
-  - O que é
-  - Como usar no R
-  - Pacotes {workflows} e {recipes}
+Referências extras comentadas nas aulas.
 
+```{r}
+readxl::read_excel("referencias_extras.xlsx") %>%
+  dplyr::filter(aula <= num_aula, tema != "Conversa/Dúvidas") %>% 
+  dplyr::mutate(link = glue::glue("[{desc}]({url})")) %>%
+  dplyr::select(-desc, -url) %>%
+  dplyr::arrange(num_aula) %>% 
+  knitr::kable(col.names = c("Aula", "Tema", "Descrição"))
+```
+
+Materiais que comentamos quando tiramos dúvidas (não necessariamente são relacionadas com o conteúdo da aula).
+
+```{r}
+readxl::read_excel("referencias_extras.xlsx") %>%
+  dplyr::filter(aula <= num_aula, tema == "Conversa/Dúvidas") %>% 
+  dplyr::mutate(link = glue::glue("[{desc}]({url})")) %>%
+  dplyr::select(-desc, -url) %>%
+  knitr::kable(col.names = c("Aula", "Tema", "Descrição"))
+```
+
+## Redes sociais da Curso-R
+
+Instagram: https://www.instagram.com/cursoo_r/
+
+Twitter: https://twitter.com/curso_r
+
+Instagram: https://www.youtube.com/c/CursoR6/featured
+
+Linkedin: https://www.linkedin.com/company/curso-r/
+
+Facebook: https://www.facebook.com/cursodeR

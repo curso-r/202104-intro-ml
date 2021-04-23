@@ -1,57 +1,96 @@
 
-# Introdução ao Machine Learning
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-Repositório principal do curso Introdução ao Machine Learning.
+## Referências do curso
 
-Inscreva-se no curso:
-<https://www.curso-r.com/cursos/intro-machine-learning>
+[Clique
+aqui](https://github.com/curso-r/202104-intro-ml/raw/master/material_do_curso.zip)
+para baixar o material do curso.
 
-**Acesse o material completo do curso escolhendo uma das turmas
-abaixo**.
+### Programação em R
 
-| Turma          | Material                                    | Github                                       |
-| :------------- | :------------------------------------------ | :------------------------------------------- |
-| Junho de 2020  | <https://curso-r.github.io/202006-intro-ml> | <https://github.com/curso-r/202006-intro-ml> |
-| Março de 2020  | <https://curso-r.github.io/202003-intro-ml> | <https://github.com/curso-r/202003-intro-ml> |
-| Agosto de 2019 | <https://curso-r.github.io/201908-intro-ml> | <https://github.com/curso-r/201908-intro-ml> |
+-   [Livro da Curso-R (Curso-R)](https://livro.curso-r.com/)
+-   [Tidyverse (Wickham H)](https://www.tidyverse.org/)
+-   [R for Data Science (Wickham H)](https://r4ds.had.co.nz/)
+-   [Advanced R (Wickham H)](https://adv-r.hadley.nz/)
 
-# Ementa
+### Machine Learning
 
-  - **O que é Machine Learning**
-      - História
-      - O que é modelagem preditiva
-      - Definições e Nomenclaturas
-      - Por que e quando usar
-      - Métricas e Funções de Custo
-  - **Conceitos Centrais**
-      - Overfitting
-      - Hiperparâmetros
-      - Bases de Treino/Teste/Validação
-      - Cross-Validation
-      - Relação Viés-Variância
-  - **Modelos de Regressão**
-      - Regressão Linar
-      - RMSE, MAPE, R2.
-      - Gradient Descent
-      - Estimadores e estimativas
-      - Regularização LASSO
-      - Principais cuidados com os dados
-  - **Modelos de Classificação**
-      - Regressão Logística
-      - Binary Cross-entropy (Deviance)
-      - Probabilidades vs Classes
-      - Matriz de Confusão
-      - Curva ROC
-      - Acurácia, recall, precisão, F1, AUROC.
-  - **Modelos de Árvores**
-      - Árvores de decisão
-      - GINI e Entropia
-      - Ganho de Informação
-      - Random Forest
-      - Gradient Boosting (XGBoost)
-  - **Tidymodels**
-      - O que é
-      - Como usar no R
-      - Pacotes {workflows} e {recipes}
+-   [Introduction to Statistical Learning (Hastie, et
+    al)](http://faculty.marshall.usc.edu/gareth-james/ISL/ISLR%20Seventh%20Printing.pdf)
+-   [Elements of Statistical Learning (Hastie, et
+    al)](https://web.stanford.edu/~hastie/Papers/ESLII.pdf)
+-   [Computer Age Statistical Inference (Hastie,
+    Efron)](https://web.stanford.edu/~hastie/CASI_files/PDF/casi.pdf)
+-   [Tidymodels (Kuhn, et al)](https://www.tmwr.org/)
+-   [Feature Engineering and Selection: A Practical Approach for
+    Predictive Models (Kuhn, Kjell)](http://www.feat.engineering/)
+-   [Kaggle](https://www.kaggle.com/)
+
+### Miscelânea
+
+-   [Tidytext (Silges, et al)](https://www.tidytextmining.com/)
+
+-   Nosso blog: <https://curso-r.com/blog/>
+
+## Dúvidas
+
+Fora do horário de aula ou monitoria:
+
+-   perguntas gerais sobre o curso deverão ser feitas no Classroom.
+
+-   perguntas sobre R, principalmente as que envolverem código, deverão
+    ser enviadas no [nosso fórum](https://discourse.curso-r.com/).
+
+## Slides
+
+| slide                             | link                                                                        |
+|:----------------------------------|:----------------------------------------------------------------------------|
+| slides/00-intro-curso.html        | <https://curso-r.github.io/main-intro-ml/slides/00-intro-curso.html>        |
+| slides/01-intro-ml.html           | <https://curso-r.github.io/main-intro-ml/slides/01-intro-ml.html>           |
+| slides/03-modelos-de-arvores.html | <https://curso-r.github.io/main-intro-ml/slides/03-modelos-de-arvores.html> |
+| slides/04-dataprep.html           | <https://curso-r.github.io/main-intro-ml/slides/04-dataprep.html>           |
+
+## Scripts utilizados em aula
+
+| script                                 | link                                                                                        |
+|:---------------------------------------|:--------------------------------------------------------------------------------------------|
+| 01-tidymodels.R                        | <https://curso-r.github.io/202104-intro-ml/exemplos/01-tidymodels.R>                        |
+| 02-overfitting.R                       | <https://curso-r.github.io/202104-intro-ml/exemplos/02-overfitting.R>                       |
+| 03-cross-validation.R                  | <https://curso-r.github.io/202104-intro-ml/exemplos/03-cross-validation.R>                  |
+| 04-hiperparametros.R                   | <https://curso-r.github.io/202104-intro-ml/exemplos/04-hiperparametros.R>                   |
+| 05-regressao-linear.R                  | <https://curso-r.github.io/202104-intro-ml/exemplos/05-regressao-linear.R>                  |
+| 06-regressao-logistica-v2.R            | <https://curso-r.github.io/202104-intro-ml/exemplos/06-regressao-logistica-v2.R>            |
+| 06-regressao-logistica.R               | <https://curso-r.github.io/202104-intro-ml/exemplos/06-regressao-logistica.R>               |
+| 07-regressao-linear-com-lasso-na-mao.R | <https://curso-r.github.io/202104-intro-ml/exemplos/07-regressao-linear-com-lasso-na-mao.R> |
+| 08-normalizacao-lasso-recipes.R        | <https://curso-r.github.io/202104-intro-ml/exemplos/08-normalizacao-lasso-recipes.R>        |
+| 09-exemplo-arvore-pt1.R                | <https://curso-r.github.io/202104-intro-ml/exemplos/09-exemplo-arvore-pt1.R>                |
+| 10-exemplo-arvore-pt2.R                | <https://curso-r.github.io/202104-intro-ml/exemplos/10-exemplo-arvore-pt2.R>                |
+| 13-adult.R                             | <https://curso-r.github.io/202104-intro-ml/exemplos/13-adult.R>                             |
+| 13-xgboost-sql.R                       | <https://curso-r.github.io/202104-intro-ml/exemplos/13-xgboost-sql.R>                       |
+| 14-adult-exemplo-submissao.R           | <https://curso-r.github.io/202104-intro-ml/exemplos/14-adult-exemplo-submissao.R>           |
+
+## Material extra
+
+Referências extras comentadas nas aulas.
+
+| Aula | Tema | Descrição |
+|:-----|:-----|:----------|
+
+Materiais que comentamos quando tiramos dúvidas (não necessariamente são
+relacionadas com o conteúdo da aula).
+
+| Aula | Tema | Descrição |
+|:-----|:-----|:----------|
+
+## Redes sociais da Curso-R
+
+Instagram: <https://www.instagram.com/cursoo_r/>
+
+Twitter: <https://twitter.com/curso_r>
+
+Instagram: <https://www.youtube.com/c/CursoR6/featured>
+
+Linkedin: <https://www.linkedin.com/company/curso-r/>
+
+Facebook: <https://www.facebook.com/cursodeR>
