@@ -44,12 +44,12 @@ Fora do horário de aula ou monitoria:
 
 ## Slides
 
-| slide                             | link                                                                        |
-|:----------------------------------|:----------------------------------------------------------------------------|
-| slides/00-intro-curso.html        | <https://curso-r.github.io/main-intro-ml/slides/00-intro-curso.html>        |
-| slides/01-intro-ml.html           | <https://curso-r.github.io/main-intro-ml/slides/01-intro-ml.html>           |
-| slides/03-modelos-de-arvores.html | <https://curso-r.github.io/main-intro-ml/slides/03-modelos-de-arvores.html> |
-| slides/04-dataprep.html           | <https://curso-r.github.io/main-intro-ml/slides/04-dataprep.html>           |
+| slide                             | link                                                                          |
+|:----------------------------------|:------------------------------------------------------------------------------|
+| slides/00-intro-curso.html        | <https://curso-r.github.io/202104-intro-ml/slides/00-intro-curso.html>        |
+| slides/01-intro-ml.html           | <https://curso-r.github.io/202104-intro-ml/slides/01-intro-ml.html>           |
+| slides/03-modelos-de-arvores.html | <https://curso-r.github.io/202104-intro-ml/slides/03-modelos-de-arvores.html> |
+| slides/04-dataprep.html           | <https://curso-r.github.io/202104-intro-ml/slides/04-dataprep.html>           |
 
 ## Scripts utilizados em aula
 

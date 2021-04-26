@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 
 library(magrittr)
 
-main_repo <- "main-intro-ml"
+main_repo <- "202104-intro-ml"
 turma <- "202104-intro-ml"
 num_aula <- 1
 ```

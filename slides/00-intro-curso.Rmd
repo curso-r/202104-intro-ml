@@ -24,19 +24,36 @@ class: middle, center
 
 ---
 
-## Curso-R
 
-<img src="static/img/professores.png" style=" display: block; margin-left: auto; margin-right: auto;"></img>
+class: middle, center
+
+## A empresa
+
+.pull-left[
+```{r, echo = FALSE}
+knitr::include_graphics("https://d33wubrfki0l68.cloudfront.net/295643c6243701ae6a9bac3fb8ad467ff0ce3c84/d1785/img/logo/cursor1-41.png")
+```
+
+<br>
+<br>
+
+```{r, echo = FALSE}
+knitr::include_graphics("img/logo_r6.png")
+```
+
+]
+
+.pull-right[
+```{r, echo = FALSE}
+knitr::include_graphics("img/produtos.png")
+```
+]
+
+### [www.curso-r.com](https://www.curso-r.com)
 
 ---
 
-## Linha do tempo
 
-<center>
-<img src="static/img/linha_do_tempo.png" width = 45%></img>
-</center>
-
----
 ## Nossos cursos
 
 .pull-left[
@@ -44,8 +61,10 @@ class: middle, center
   <div class="card">
     <h2>Programação em R</h2>
     <hr style = "background-color: #3bb44a;"/>
+    <p><a href = "https://www.curso-r.com/cursos/intro-programacao/">Introdução à programação com R</a></p>
     <p><a href = "https://www.curso-r.com/cursos/r4ds-1/">R para Ciência de dados I</a></p>
-        <p><a href = "https://www.curso-r.com/cursos/r4ds-2/">R para Ciência de dados II</a></p>
+    <p><a href = "https://www.curso-r.com/cursos/r4ds-2/">R para Ciência de dados II</a></p>
+    <p><a href = "https://www.curso-r.com/cursos/pacotes/">Pacotes</a></p>
   </div>
 </div>
 
@@ -53,12 +72,11 @@ class: middle, center
 
 <div class="container center">
   <div class="card">
-    <h2>Modelagem</h2>
-    <hr style = "background-color: #996699;"/>
-    <p><a href = "https://www.curso-r.com/cursos/regressao/">Regressão Linear</a></p>
-    <p><a href = "https://www.curso-r.com/cursos/intro-machine-learning/">Machine Learning</a></p>
-    <p><a href = "https://www.curso-r.com/cursos/xgboost/">XGBoost</a></p>
-    <p><a href = "https://www.curso-r.com/cursos/deep-learning/">Deep Learning</a></p>
+    <h2>Extração de dados</h2>
+    <hr style = "background-color: #eeba30;"/>
+    <p><a href = "https://www.curso-r.com/cursos/faxina/">Faxina de dados</a></p>
+    <p><a href = "https://www.curso-r.com/cursos/web-scraping/">Web scraping</a></p>
+
   </div>
 </div>
 ]
@@ -67,10 +85,12 @@ class: middle, center
 .pull-right[
 <div class="container center">
   <div class="card">
-    <h2>Extração de dados</h2>
-    <hr style = "background-color: #eeba30;"/>
-    <p><a href = "https://www.curso-r.com/cursos/web-scraping-1/">Web scraping I</a></p>
-        <p><a href = "https://www.curso-r.com/cursos/web-scraping-2/">Web scraping II</a></p>
+    <h2>Modelagem</h2>
+    <hr style = "background-color: #996699;"/>
+    <p><a href = "https://www.curso-r.com/cursos/regressao-linear/">Regressão Linear</a></p>
+    <p><a href = "https://www.curso-r.com/cursos/intro-machine-learning/">Machine Learning</a></p>
+    <p><a href = "https://www.curso-r.com/cursos/xgboost/">XGBoost</a></p>
+    <p><a href = "https://www.curso-r.com/cursos/deep-learning/">Deep Learning</a></p>
   </div>
 </div>
 
@@ -80,8 +100,9 @@ class: middle, center
   <div class="card">
     <h2>Comunicação e automação</h2>
     <hr style = "background-color: #ff6699;"/>
+    <p><a href = "https://www.curso-r.com/cursos/dashboards/">Relatórios e visualização de dados</a></p>
     <p><a href = "https://www.curso-r.com/cursos/dashboards/">Dashboards com R</a></p>
-        <p><a href = "https://www.curso-r.com/cursos/deploy/">Deploy</a></p>
+    <p><a href = "https://www.curso-r.com/cursos/deploy/">Deploy</a></p>
   </div>
 </div>
 ]
@@ -92,15 +113,51 @@ class: middle, center
 # Sobre o curso
 
 ---
-## Dinâmica curso
+## Orientações
 
-- As aulas serão (quase totalmente) expositivas.
+- Dinâmica das aulas:
+    - As aulas serão (quase totalmente) expositivas.
+    - Todos os códigos executados em aula serão disponibilizados https://curso-r.github.io/202104-intro-ml/
+    - Intervalos de 20 min iniciados por volta às 20h e 20h20
+- Após as aulas:
+    - Os exercícios não serão avaliações, portanto não terão prazo nem nota. O objetivo deles será gerar dúvidas em vocês, para que os professores possam melhor orientá-las(los) durante o curso.
+    - O certificado será emitido mediante uma **entrega final** (Kaggle InClass). O prazo da entrega final será de 30 dias após o fim do curso.
+---
+## Orientações sobre a ferramenta de videochamadas
 
-- Teremos diversos exercícios para serem feitos "em casa".
 
-- Os exercícios não serão avaliações, portanto não terão prazo nem nota. O objetivo deles será gerar dúvidas em vocês, para que os professores possam melhor orientá-las(los) durante o curso.
+- Utilizamos a ferramenta Zoom.
 
-- O certificado será emitido mediante uma **entrega final** (Kaggle InClass). O prazo da entrega final será de 30 dias após o fim do curso.
+- A barra inferior apresenta alguns controles importantes, como:
+
+```{r, echo = FALSE, fig.align='center'}
+knitr::include_graphics("img/zoom_barra.png")
+```
+
+  - Áudio: ative o áudio caso queira falar algo.
+  
+  - Vídeo: opcional.
+  
+  - Bate-papo: se comunique conosco e com as pessoas da turma através do bate papo! 
+  
+  - Reações: 
+
+
+```{r, echo = FALSE, out.width='50%', fig.align='center'}
+knitr::include_graphics("img/zoom_reacoes.png")
+```
+
+---
+
+## Bate-papo no Zoom
+
+```{r, echo = FALSE, out.width="40%", fig.align='center'}
+knitr::include_graphics("img/zoom_batepapo.png")
+```
+---
+class: middle, center
+
+# Sobre o curso
 
 ---
 
@@ -154,5 +211,3 @@ class: middle, center
 
 - Mantenha o seu microfone sempre mutado. Alguns ruídos comuns podem atrapalhar o andamento da aula.
     - Caso você queira fazer uma pergunta, sinta-se a vontade para colocá-la no chat ou use a função "levantar a mão" do Zoom.
-
----

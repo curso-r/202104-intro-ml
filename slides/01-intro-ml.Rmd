@@ -21,9 +21,22 @@ library(knitr)
 library(tidyverse)
 library(ISLR)
 library(kableExtra)
+
 theme_set(theme_minimal(14))
 options(htmltools.dir.version = FALSE)
 ```
+
+```{r, include=FALSE}
+melhor_reta <- lm(dist ~ speed, data = cars)
+
+cars_com_predicoes <- melhor_reta %>%
+  broom::augment() %>%
+  rename(pred_melhor_reta = .fitted) %>%
+  mutate(
+    pred_reta_a_mao = 12 + 3 * speed
+  )
+```
+
 
 # Ciência de dados
 
@@ -126,7 +139,7 @@ adv_ok %>%
   facet_wrap(~midia, scales = "free")
 ```
 
-* PERGUNTA 1: Se eu investir X em propaganda numa certa mídia, quanto vou vender?
+* PERGUNTA 1: Se eu investir $X_1$ em propaganda numa certa mídia $X_2$, quanto vou vender, que vamos representar pela letra$Y$?
 
 ---
 
@@ -145,16 +158,52 @@ adv_ok %>%
   facet_wrap(~midia, scales = "free")
 ```
 
-* PERGUNTA 1: Se eu investir X em propaganda numa certa mídia, quanto vou vender?
-* PERGUNTA 2: Um computador pode captar essa influência?
+* PERGUNTA 1: Se eu investir $X_1$ em propaganda numa certa mídia $X_2$, quanto vou vender, que vamos representar pela letra$Y$?
+* PERGUNTA 2: Como um computador pode captar essa relação?
+
+---
+
+# Definições e Nomenclaturas
+
+### A tabela por trás
+
+```{r}
+set.seed(1)
+adv_ok %>%
+  sample_n(8) %>%
+  mutate_if(is.numeric, round, digits = 1) %>%
+  select(midia, investimento, vendas) %>%
+  kable(format = "html")
+```
 
 ---
 
 # Machine Learning 
 
-Matematicamente, queremos que o computador encontre uma função $f()$ (**modelo**) tal que:
+Se eu investir $X_1$ em propaganda numa certa mídia $X_2$, quanto vou vender, que vamos representar pela letra$Y$?
 
-<img src="static/img/y_fx.png" style="position: fixed; width: 40%; top: 250px; left: 300px;">
+Para responder esse pergunta matematicamente, queremos encontrar uma função $f()$, e mais especificamente que o **computador** encontre, uma função tal que:
+
+<img src="static/img/y_fx.png" style="position: fixed; width: 40%; top: 325px; left: 300px;">
+
+---
+
+# Definições e Nomenclaturas
+
+* $X_1$, $X_2$, ..., $X_p$: variáveis explicativas (ou variáveis independentes ou *features* ou preditores).
+
+- $\boldsymbol{X} = {X_1, X_2, \dots, X_p}$: conjunto de todas as *features*.
+
+* __Y__: variável resposta (ou variável dependente ou *target*). 
+* __Ŷ__: valor **esperado** (ou predição ou estimado ou *fitted*). 
+* $f(X)$ também é conhecida também como "Modelo" ou "Hipótese".
+
+## No exemplo:
+
+- $X_1$: `midia` - indicadador de se a propaganda é para jornal, rádio, ou TV.
+- $X_2$: `investimento` - valor do orçamento
+
+* __Y__: `vendas` - qtd vendida
 
 ---
 
@@ -210,8 +259,8 @@ Em inferência estamos mais interessados em entender a relação entre as variá
 
 Por exemplo:
 
-* Quais são as variáveis que estão mais relacionadas com a respostas?
-* Qual a relação entre a resposta e cada um dos preditores?
+* Qual tipo de mídia influencia mais o $Y$?
+* Existe alguma mídia em que o investimento praticamente não faz efeito?
 
 
 Neste curso, vamos falar principalmente sobre **predição**.
@@ -225,11 +274,9 @@ Neste curso, vamos falar principalmente sobre **predição**.
 
 ## Predição
 
-Em muitas situações $X$ está disponível facilmente mas, $Y$ não é fácil de descobrir. (Ou mesmo não é possível descobrí-lo).
+Em muitas situações $X$ está disponível facilmente mas, $Y$ não é fácil de descobrir. (Ou mesmo não é possível descobrí-lo). Então nós usamos $f(X)$ como estimativa. 
 
-$$\hat{Y} = \hat{f}(X)$$
-é uma boa estimativa.
-Neste caso não estamos interessados em como é a estrutura $\hat{f}$ desde que ela apresente predições boas para $Y$.
+Neste caso não importa se $f(X)$ é uma reta ou uma escadinha desde que ela apresente predições boas para $Y$.
 
 ---
 
@@ -242,83 +289,15 @@ background-size: contain
 
 ---
 
-# Flexibilidade ou Interpretabilidade da f(x)
-
-```{r}
-#![](https://user-images.githubusercontent.com/4706822/47456108-01d5c880-d7aa-11e8-899a-74804f74afc5.png)
-```
-
-```{r, fig.width=11, fig.height=7}
-library(ggrepel)
-set.seed(1)
-tribble(
-  ~modelo, ~Flexibilidade, ~Interpretabilidade,
-  "Regressão Linear", 0, 3,
-  "Regressão Logística", 0, 3, 
-  "LASSO", 0.3, 2.7,
-  "Árvore de Decisão", 1, 2.2,
-  "Generalized Additive Models", 1.5, 1.5,
-  "Redes Neurais, Deep Learning", 3, 1,
-  "Bagging, Boosting", 3.2, 0.8,
-  "SVM", 2.6, 0.5
-) %>%
-  ggplot(aes(x = Flexibilidade, y = Interpretabilidade)) +
-  geom_text_repel(aes(label = modelo), size = 7) +
-  theme_minimal(24) +
-  scale_x_continuous(breaks = c(0, 3.2), labels = c("Baixo", "Alto")) +
-  scale_y_continuous(breaks = c(0, 3.5), labels = c("Baixo", "Alto"))
-
-
-```
-
-
----
-
 # Definições e Nomenclaturas
 
-### A tabela por trás
-
-```{r}
-set.seed(1)
-adv_ok %>%
-  sample_n(8) %>%
-  mutate_if(is.numeric, round, digits = 1) %>%
-  select(midia, investimento, vendas) %>%
-  kable(format = "html")
-```
-
-
----
-
-# Definições e Nomenclaturas
-
-* $X_1$, $X_2$, ..., $X_p$: variáveis explicativas (ou variáveis independentes ou *features* ou preditores).
-
-- $\boldsymbol{X} = {X_1, X_2, \dots, X_p}$: conjunto de todas as *features*.
-
-* __Y__: variável resposta (ou variável dependente ou *target*). 
-* __Ŷ__: valor **esperado** (ou predição ou estimado ou *fitted*). 
-* $f(X)$ também é conhecida também como "Modelo" ou "Hipótese".
-
-## No exemplo:
-
-- $X_1$: `midia` - indicadador de se a propaganda é para jornal, rádio, ou TV.
-- $X_2$: `investimento` - valor do orçamento
-
-* __Y__: `vendas` - qtd vendida
-
-
----
-
-# Definições e Nomenclaturas
-
-## Observado VERSUS Esperado
+$f(X) \sim Y$ quer dizer que $f(X)$ está próximo de $Y$. Nós qualificamos essa aproximação comparando o dado observado com o dado esperado:
 
 - __Y__ é um valor **observado** (ou verdade ou *truth*)
 - __Ŷ__ é um valor **esperado** (ou predição ou estimado ou *fitted*). 
 - __Y__ - __Ŷ__ é o resíduo (ou erro)
 
-Por definição, $\hat{Y} = f(x)$ que é o valor que a função $f$ retorna. 
+Por definição, $\hat{Y} = f(x)$ é o valor que a função $f$ retorna. 
 
 ```{r, fig.width = 12, fig.height = 5}
 ponto_predito = tibble::tribble(
@@ -358,84 +337,9 @@ adv_ok %>%
 
 ---
 
-# Modo - Regressão e Classificação
+# Métricas - quão boa é a aproximação de $f(x)$?
 
-Existem dois principais tipos de problemas em Machine Learning:
-
-.pull-left[
-
-## Regressão
-
-__Y__ é uma variável contínua.
-
-- Volume de vendas
-- Peso
-- Temperatura
-- Valor de Ações
-
-]
-
-.pull-right[
-
-## Classificação
-
-__Y__ é uma variável categórica.
-
-- Fraude/Não Fraude
-- Pegou em dia/Não pagou
-- Cancelou assinatura/Não cancelou (churn)
-- Gato/Cachorro/Cavalo/Outro
-
-
-
-]
-
----
-
-
-<img src="https://wordstream-files-prod.s3.amazonaws.com/s3fs-public/styles/simple_image/public/images/machine-learning1.png?Q_SmWhhhAEOO_32HNjPhcxsPhreWV26o&itok=yjEJbEKD" style="display: block; margin-left: auto; margin-right: auto;"></img>
-
----
-
-# Métricas
-
-Métricas: para medir o quanto a $f(x)$ está errando as previsões.
-
-.pull-left[
-
-## Regressão
-
-__Y__ é uma variável contínua.
-
-- RMSE
-- R2
-- MAE
-- MAPE
-...
-]
-
-.pull-right[
-
-## Classificação
-
-__Y__ é uma variável categórica.
-
-- Acurácia
-- AUROC
-- Precision/Recall
-- Deviance (Cross-Entropy)
-- F1
-- Kappa
-...
-]
-
-[lista de métricas no `yardstick`](https://tidymodels.github.io/yardstick/articles/metric-types.html)
-
----
-
-# Métricas - "Melhor f(x)" segundo o quê?
-
-Queremos a $f(x)$ que **erre menos**.
+Queremos medir o erro cometido por $f(x)$.
 
 Exemplo de medida de erro: **R**oot **M**ean **S**quared **E**rror.
 
@@ -443,19 +347,17 @@ $$
 RMSE = \sqrt{\frac{1}{N}\sum(y_i - \hat{y_i})^2}
 $$
 
-Ou seja, nosso **objetivo** é
+Ou seja, nosso **objetivo** pode ser
 
 ## Encontrar $f(x)$ que nos retorne o ~menor~ RMSE.
 
-
-
 ---
 
-# Métricas - "Melhor f(x)" segundo o quê?
+# Métricas - quão boa é a aproximação de $f(x)$?
 
-Queremos a reta que **erre menos**.
+Encontrar a reta que **erra menos** é um problema muito conhecido.
 
-Exemplo: Modelo de regressão linear $y = b + m x$.
+Exemplo: Modelo de regressão linear $y = b + m x$, precisamos procurar os $b$ e $m$ que nos dão os melhores erros.
 
 ![](static/img/0_D7zG46WrdKx54pbU.gif)
 
@@ -465,67 +367,13 @@ Fonte: [https://alykhantejani.github.io/images/gradient_descent_line_graph.gif](
 
 ]
 
-
 ---
 
 # Métricas - "Melhor f(x)" segundo o quê?
 
 Queremos a $f(x)$ que **erre menos**.
 
-Exemplo de medida de erro: **R**oot **M**ean **S**quared **E**rror.
-
-$$
-RMSE = \sqrt{\frac{1}{N}\sum(y_i - \hat{y_i})^2}
-$$
-
-```{r, fig.width=10, fig.height=4, warning=FALSE}
-melhor_reta <- lm(dist ~ speed, data = cars)
-cars_com_predicoes <- melhor_reta %>% 
-  broom::augment() %>%
-  rename(pred_melhor_reta = .fitted) %>%
-  mutate(
-    pred_reta_a_mao = 12 + 3 * speed
-  )
-
-grafico_residuos_melhor_reta <- cars_com_predicoes %>%
-  ggplot(aes(x = speed, y = dist)) +
-  geom_point(size = 2) +
-  geom_abline(
-    intercept = melhor_reta$coefficients[1], 
-    slope =     melhor_reta$coefficients[2], 
-    size = 1,
-    colour = "salmon"
-  ) +
-  geom_segment(aes(xend = speed, yend = pred_melhor_reta), colour = "blue", size = 1) +
-  labs(
-    subtitle = "Resíduos da Melhor Reta",
-    title = "Os segmentos azuis são os resíduos (ou o quanto o modelo errou naqueles pontos)."
-  ) 
-
-grafico_residuos_reta_a_mao <- cars_com_predicoes %>%
-  ggplot(aes(x = speed, y = dist)) +
-  geom_point(size = 2) +
-  geom_abline(
-    intercept = 12, 
-    slope =     3, 
-    size = 1,
-    colour = "orange"
-  ) +
-  geom_segment(aes(xend = speed, yend = pred_reta_a_mao), colour = "blue", size = 1) +
-  labs(
-    subtitle = "Resíduos da Reta Escolhida a Mão"
-  ) 
-library(patchwork)
-grafico_residuos_melhor_reta + grafico_residuos_reta_a_mao
-```
-
----
-
-# Métricas - "Melhor f(x)" segundo o quê?
-
-Queremos a $f(x)$ que **erre menos**.
-
-Exemplo de medida de erro: **R**oot **M**ean **S**quared **E**rror.
+Exemplos de medida de erro: **R**oot **M**ean **S**quared **E**rror não é a única.
 
 $$
 RMSE = \sqrt{\frac{1}{N}\sum(y_i - \hat{y_i})^2}
@@ -554,6 +402,8 @@ $$
 ---
 
 ## Um pouco sobre R-quadrado ( $R^2$ )
+
+Muitas medidas de erro, que são gerais, são motivadas por ideias da regressão linear:
 
 $$
 R^2 = 1 - \frac{\sum(y_i - \color{salmon}{\hat{y_i}})^2}{\sum(y_i - \color{royalblue}{\bar{y}})^2} = 1 - \frac{\color{salmon}{SQR}}{\color{royalblue}{SQT}}
@@ -591,16 +441,44 @@ $R^2$ pode ser calculado para qualquer tipo de modelo.
 Ver [ISL](https://www.ime.unicamp.br/~dias/Intoduction%20to%20Statistical%20Learning.pdf) página 68 (Assessing the Accuracy of the Model).
 ]
 
-
 ---
 
-# Ir para o R
+# Flexibilidade ou Interpretabilidade de modelos de Machine Learning
+
+```{r}
+#![](https://user-images.githubusercontent.com/4706822/47456108-01d5c880-d7aa-11e8-899a-74804f74afc5.png)
+```
+
+```{r, fig.width=11, fig.height=7}
+library(ggrepel)
+set.seed(1)
+tribble(
+  ~modelo, ~Flexibilidade, ~Interpretabilidade,
+  "Regressão Linear", 0, 3,
+  "Regressão Logística", 0, 3, 
+  "LASSO", 0.3, 2.7,
+  "Árvore de Decisão", 1, 2.2,
+  #"Generalized Additive Models", 1.5, 1.5,
+  "Redes Neurais, Deep Learning", 3, 1,
+  "Bagging, Boosting", 3.2, 0.8,
+  #"SVM", 2.6, 0.5
+) %>%
+  ggplot(aes(x = Flexibilidade, y = Interpretabilidade)) +
+  geom_text_repel(aes(label = modelo), size = 7) +
+  theme_minimal(24) +
+  scale_x_continuous(breaks = c(0, 3.2), labels = c("Baixo", "Alto")) +
+  scale_y_continuous(breaks = c(0, 3.5), labels = c("Baixo", "Alto"))
+
+
+```
 
 ---
 
 # Overfitting (sobreajuste)
 
-Intuição
+Procurar a $f(x)$ que se ajuste perfeitamente aos dados é uma boa estratégia?
+
+Intuição (TREINO: dados observados primeiro, TESTE: dados novos)
 
 ![scatter_eqm](static/img/overfiting_scatter_eqm.gif)
 
@@ -759,10 +637,6 @@ pt4
 
 ---
 
-# Ir para o R
-
----
-
 # Dados novos vs antigos
 
 - **Base de Treino** (dados antigos): a base de histórico que usamos para ajustar o modelo.
@@ -801,8 +675,6 @@ initial_split(dados, prop=3/4) # 3/4 da base será de treino
 ```
 
 A base de teste que só será tocada quando a modelagem terminar. Ela nunca deverá influenciar as decisões que tomamos no período da modelagem.
-
-
 
 ---
 
@@ -929,11 +801,6 @@ Fonte: [bookdown.org/max/FES/resampling.html](https://bookdown.org/max/FES/resam
 
 ---
 
-# Ir para o R
-
-
----
-
 class: inverse
 background-image: url(static/img/ml_101.png)
 background-position: left 140px
@@ -941,6 +808,9 @@ background-size: contain
 
 # Resumo dos conceitos
 
+---
+
+<img src="https://wordstream-files-prod.s3.amazonaws.com/s3fs-public/styles/simple_image/public/images/machine-learning1.png?Q_SmWhhhAEOO_32HNjPhcxsPhreWV26o&itok=yjEJbEKD" style="display: block; margin-left: auto; margin-right: auto;"></img>
 
 ---
 
@@ -1467,6 +1337,7 @@ Modelo real: $y = 10 + 0.5log(x)$
 .pull-right[
 Modelo proposto: $\small y = \beta_0 + \beta_1log(x)$ 
 ]
+
 ```{r}
 set.seed(1)
 y_x <- tibble(
@@ -1488,7 +1359,7 @@ grafico_y_x_curvas <- grafico_y_x +
 grafico_y_x_log <- grafico_y_x + scale_x_log10() + labs(x = "x (escala logarítmica)")
 ```
 
-```{r, fig.width=9, fig.height=3, fig.align="center", dpi=300}
+```{r, fig.width=9, fig.height=3, fig.align="center", dpi=300, eval = FALSE}
 grafico_y_x_curvas + grafico_y_x_log
 ```
 
@@ -1512,6 +1383,8 @@ Modelo proposto: $y = \beta_0 + \beta_1x + \beta_2x^2 + \beta_3x^3$
 
 
 ```{r, fig.height=4, fig.width=11, dpi=300}
+library(patchwork)
+
 set.seed(1)
 y_x_poly <- tibble(
   x = runif(30, 0, 20),
@@ -1529,6 +1402,7 @@ grafico_y_x_poly_curvas <- grafico_y_x_poly +
   geom_smooth(aes(colour = "y ~ poly(x, 2)"), method = "lm", se = FALSE, formula = y ~ poly(x, 2)) +
   geom_smooth(aes(colour = "y ~ poly(x, 3)"), method = "lm", se = FALSE, formula = y ~ poly(x, 3)) +
   labs(colour = "Modelo") 
+
 grafico_y_x_poly + grafico_y_x_poly_curvas
 ```
 
