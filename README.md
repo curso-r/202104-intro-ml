@@ -4,7 +4,7 @@
 ## Referências do curso
 
 [Clique
-aqui](https://github.com/curso-r/202104-intro-ml/raw/master/material_do_curso.zip)
+aqui](https://github.com/curso-r/202104-intro-ml/archive/refs/heads/master.zip)
 para baixar o material do curso.
 
 ### Programação em R
