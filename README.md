@@ -57,6 +57,7 @@ Fora do horário de aula ou monitoria:
 |:---------------------------------------|:--------------------------------------------------------------------------------------------|
 | 01-tidymodels.R                        | <https://curso-r.github.io/202104-intro-ml/exemplos/01-tidymodels.R>                        |
 | 02-overfitting.R                       | <https://curso-r.github.io/202104-intro-ml/exemplos/02-overfitting.R>                       |
+| 03-01-tidymodels-2.R                   | <https://curso-r.github.io/202104-intro-ml/exemplos/03-01-tidymodels-2.R>                   |
 | 03-cross-validation.R                  | <https://curso-r.github.io/202104-intro-ml/exemplos/03-cross-validation.R>                  |
 | 04-hiperparametros.R                   | <https://curso-r.github.io/202104-intro-ml/exemplos/04-hiperparametros.R>                   |
 | 05-regressao-linear.R                  | <https://curso-r.github.io/202104-intro-ml/exemplos/05-regressao-linear.R>                  |
@@ -69,6 +70,7 @@ Fora do horário de aula ou monitoria:
 | 13-adult.R                             | <https://curso-r.github.io/202104-intro-ml/exemplos/13-adult.R>                             |
 | 13-xgboost-sql.R                       | <https://curso-r.github.io/202104-intro-ml/exemplos/13-xgboost-sql.R>                       |
 | 14-adult-exemplo-submissao.R           | <https://curso-r.github.io/202104-intro-ml/exemplos/14-adult-exemplo-submissao.R>           |
+| exemplo-ao-vivo-aula.R                 | <https://curso-r.github.io/202104-intro-ml/exemplos/exemplo-ao-vivo-aula.R>                 |
 
 ## Material extra
 
