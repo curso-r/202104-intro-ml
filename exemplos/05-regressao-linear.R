@@ -12,7 +12,8 @@ help(Auto)
 # EAD ---------------------------------------------------------------------
 glimpse(Auto)
 skim(Auto)
-# GGally::ggpairs(Auto %>% select(-name))
+GGally::ggpairs(Auto %>% select(-name))
+
 library(patchwork)
 
 qplot(log(horsepower), log(mpg), data = Auto) / qplot(horsepower, mpg, data = Auto)
@@ -36,8 +37,13 @@ runif(1)
 set.seed(1)
 auto_initial_split <- Auto %>% initial_split(3/4)
 
-auto_train <- training(auto_initial_split)
+auto_train <- training(auto_initial_split) 
+
+auto_train %>% 
+  ggplot(aes(x = weight, y = mpg)) + geom_point()
+
 auto_test <- testing(auto_initial_split)
+
 
 # data prep (ainda vamos falar mais de como usar o recipes!) ------------------------
 auto_recipe <- recipe(mpg ~ ., data = auto_train) %>%
@@ -60,6 +66,7 @@ auto_model <- linear_reg(
   set_engine("glmnet")
 
 # workflow ----------------------------------------------------------------
+
 auto_wf <- workflow() %>% 
   add_model(auto_model) %>%
   add_recipe(auto_recipe)
@@ -72,17 +79,18 @@ auto_tune_grid <- tune_grid(
   auto_wf, 
   resamples = auto_resamples,
   grid = 100,
-  metrics = metric_set(rmse),
+  metrics = metric_set(rmse, mape, rsq),
   control = control_grid(verbose = TRUE, allow_par = FALSE)
 )
 
 # inspecao da tunagem -----------------------------------------------------
 autoplot(auto_tune_grid)
+  
 collect_metrics(auto_tune_grid)
-show_best(auto_tune_grid, "rmse")
+show_best(auto_tune_grid, "mape")
 
 # seleciona o melhor conjunto de hiperparametros
-auto_best_hiperparams <- select_best(auto_tune_grid, "rmse")
+auto_best_hiperparams <- select_best(auto_tune_grid, "mape")
 auto_wf <- auto_wf %>% finalize_workflow(auto_best_hiperparams)
 
 # desempenho do modelo final ----------------------------------------------
@@ -98,14 +106,14 @@ collect_predictions(auto_last_fit) %>%
     mpg = (mpg),
     .pred = (.pred)
   ) %>%
-  rmse(mpg, .pred)
+  mape(mpg, .pred)
 
 collect_predictions(auto_last_fit) %>%
   ggplot(aes(.pred, ((mpg)-(.pred)))) +
   geom_point() +
   geom_smooth(se = FALSE)
 
-vip(auto_last_fit$.workflow[[1]]$fit$fit)
+#vip(auto_last_fit$.workflow[[1]]$fit$fit)
 
 # modelo final ------------------------------------------------------------
 auto_final_model <- auto_wf %>% fit(data = Auto)
@@ -144,12 +152,25 @@ auto_final_model$fit$fit$fit$beta %>%
   theme_minimal()
 
 # predicoes ---------------------------------------------------------------
+
+modelo_usual <- lm(mpg ~ ., data = Auto)
+
 auto_com_previsao <- Auto %>% 
   mutate(
-    mpg_pred = predict(auto_final_model, new_data = .)$.pred
+    mpg_pred = predict(auto_final_model, new_data = .)$.pred,
+    mpg_pred2 = predict(modelo_usual)
   )
+
+ggplot(auto_com_previsao, aes(x = weight, y = mpg)) +
+  geom_point()
 
 # guardar o modelo para usar depois ---------------------------------------
 saveRDS(auto_final_model, file = "auto_final_model.rds")
 
+# modelo/equacao-final ----------------------------------------------------
 
+# fórmula final (VAI PARA A PRODUÇÃO)
+vip::vi(auto_final_model$fit$fit)
+
+# fórmula final (PÓS PADRONIZAÇÃO. VICIADO PARA A BASE DE TREINO)
+broom::tidy(auto_final_model$fit$fit)

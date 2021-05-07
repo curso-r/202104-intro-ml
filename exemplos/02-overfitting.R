@@ -5,7 +5,6 @@ library(patchwork)
 library(skimr)
 library(tidymodels)
 
-
 # Dados -------------------------------------------------------------------
 data("diamonds")
 
@@ -30,6 +29,7 @@ especificacao_modelo2 <- decision_tree(cost_complexity = 0, min_n = 2, tree_dept
 ajuste_modelo1 <- especificacao_modelo1 %>% fit(price ~ x, data = diamondsinho)
 ajuste_modelo2 <- especificacao_modelo2 %>% fit(price ~ x, data = diamondsinho)
 
+rpart.plot::prp(ajuste_modelo2$fit)
 
 # predicoes ---------------------------------------------------------------
 diamondsinho_com_previsao <- diamondsinho %>% 

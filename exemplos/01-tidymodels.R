@@ -7,13 +7,15 @@ library(tidymodels)
 # Dados -------------------------------------------------------------------
 data("diamonds")
 
-# EAD ---------------------------------------------------------------------
-# glimpse(diamonds)
-# skim(diamonds)
-# GGally::ggpairs(diamonds %>% sample_n(2000))
-# qplot(x, price, data = diamonds)
+# EDA ---------------------------------------------------------------------
 
+glimpse(diamonds)
 
+skim(diamonds)
+
+GGally::ggpairs(diamonds %>% sample_n(1000))
+
+qplot(x, price, data = diamonds)
 
 # Precisamos passar pro R:
 # 1. A f que queremos usar
@@ -48,7 +50,11 @@ modelo <- especificacao_modelo %>%
 
 print(modelo)
 
-# rpart.plot::prp(modelo$fit)
+rpart.plot::prp(modelo$fit)
+
+library(rpart.plot)
+
+prp(modelo$fit)
 
 # --------------------------------------------------------------------
 # Passo 3: Analisar as previsões

@@ -52,13 +52,15 @@ hiperparams <- expand.grid(
 # tunagem de hiperparametros ----------------------------------------------
 # com tune_grid()
 diamonds_tune_grid <- tune_grid(
-  price ~ x, 
   diamonds_model,
+  price ~ x, 
   resamples = diamonds_resamples,
   grid = hiperparams,
   metrics = metric_set(rmse),
   control = control_grid(verbose = TRUE, allow_par = FALSE)
 )
+
+autoplot(diamonds_tune_grid)
 
 # colocando os valores encontrados no modelo ------------------------------
 diamonds_best_hiperparams <- select_best(diamonds_tune_grid, "rmse")
@@ -72,3 +74,23 @@ diamonds_model <- diamonds_model %>%
     cost_complexity = diamonds_best_hiperparams$cost_complexity,
     min_n = 5
   )
+
+especificacao_modelo_final <- finalize_model(diamonds_model,
+                                             select_best(diamonds_tune_grid, "rmse"))
+
+# ajuste final ------------------------------------------------------------
+
+modelo_final <- fit(especificacao_modelo_final,
+                    y ~ x,
+                    data = base_treino)
+
+base_teste_com_pred <- base_teste %>% 
+  mutate(
+    pred_price = predict(modelo_final, base_teste)$.pred
+  )
+
+base_teste_com_pred %>% 
+  rmse(truth = price, estimate = pred_price)
+
+base_teste_com_pred %>% 
+  mae(truth = price, estimate = pred_price)

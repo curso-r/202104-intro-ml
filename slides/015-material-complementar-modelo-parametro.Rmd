@@ -1,0 +1,27 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Polinômio de grau 1 (regressão linear)
+
+$$y \sim  f(x) = \alpha + \beta x$$
+
+$$\text{parâmetros: }\alpha \ e\ \beta \\
+\text{ajuste do modelo: minimizar }\sum_i^n (y_i-f(x_i))^2 = (y_i-\alpha - \beta x_i)^2$$
+
+# Regressão polinomial com qualquer grau (EXEMPLO ERRADO)
+
+$$y \sim  f(x) = \alpha + \beta x + \gamma x^2 + \delta x^3 + ... + \beta_p x^p $$
+
+$$\text{parâmetros: }\alpha \ ,\ \beta, \gamma, \delta, ..., \delta_p, p \\
+\text{ajuste do modelo: minimizar }\sum_i^n (y_i-f(x_i))^2 = (y_i-\alpha - \beta x - \gamma x^2 - \delta x^3 - ... - \beta_p x^p)^2$$
+# Regressão polinomial com qualquer grau (EXEMPLO CERTO)
+
+$$y \sim  f(x) = \alpha + \beta x + \gamma x^2 + \delta x^3 + ... + \beta_p x^p $$
+$$\text{parâmetros: }\alpha \ ,\ \beta, \gamma, \delta, ..., \delta_p \\
+\text{ajuste do modelo: minimizar }\sum_i^n (y_i-f(x_i))^2 = (y_i-\alpha - \beta x - \gamma x^2 - \delta x^3 - ... - \beta_p x^p)^2$$

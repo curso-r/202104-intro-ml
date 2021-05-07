@@ -29,8 +29,8 @@ diamonds_resamples <- vfold_cv(diamonds_train, v = 5)
 
 # tunagem de hiperparametros ----------------------------------------------
 diamonds_tune_grid <- tune_grid(
-  price ~ x, 
   diamonds_model,
+  price ~ x,
   resamples = diamonds_resamples,
   grid = 10,
   metrics = metric_set(rmse, rsq),
