@@ -17,7 +17,7 @@ credit_data %>% count(Status)
 
 # PASSO 1) BASE TREINO/TESTE -----------------------------------------------
 set.seed(1)
-credit_initial_split <- initial_split(credit_data, strata = "Status", p = 0.75)
+credit_initial_split <- initial_split(credit_data, strata = "Status", prop = 0.75)
 
 credit_train <- training(credit_initial_split)
 credit_test  <- testing(credit_initial_split)
@@ -50,7 +50,9 @@ credit_lr_model <- logistic_reg(penalty = tune(), mixture = 1) %>%
   set_mode("classification") %>%
   set_engine("glmnet")
 
-credit_wf <- workflow() %>% add_model(credit_lr_model) %>% add_recipe(credit_recipe)
+credit_wf <- workflow() %>% 
+  add_model(credit_lr_model) %>% 
+  add_recipe(credit_recipe)
 
 # PASSO 5) TUNAGEM DE HIPERPARÂMETROS --------------------------------------
 # a) bases de reamostragem para validação: vfold_cv()
@@ -65,12 +67,12 @@ credit_lr_tune_grid <- tune_grid(
   resamples = credit_resamples,
   metrics = metric_set(
     accuracy, 
-    kap, # KAPPA 
-    roc_auc, 
-    precision, 
-    recall, 
-    f_meas, 
-    mn_log_loss #binary cross entropy
+    roc_auc
+    # precision, 
+    # recall, 
+    # f_meas, 
+    # mn_log_loss, #binary cross entropy
+    # kap # KAPPA 
   )
 )
 
@@ -107,7 +109,7 @@ write_rds(credit_lr_model, "credit_lr_model.rds")
 
 collect_metrics(credit_lr_last_fit)
 
-credit_test_preds <- credit_lr_last_fit$.predictions[[1]]
+credit_test_preds <- collect_predictions(credit_lr_last_fit)
 
 # roc
 credit_roc_curve <- credit_test_preds %>% roc_curve(Status, .pred_bad)
