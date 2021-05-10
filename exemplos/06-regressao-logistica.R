@@ -68,7 +68,7 @@ adult_lr_model <- logistic_reg(penalty = tune(), mixture = 1) %>%
   set_engine("glmnet")
 
 
-# workflow ----------------------------------------------------------------
+# workflow 
 adult_wf <- workflow() %>%
   add_model(adult_lr_model) %>%
   add_recipe(adult_receita)
@@ -171,7 +171,7 @@ adult_test_preds %>%
   geom_label(aes(label = scales::percent(p))) +
   geom_vline(xintercept = 1/percentis, colour = "red", linetype = "dashed", size = 1)
 
-# PASSO 7) MODELO FINAL -----------------------------------------------------
+# PASSO 8) MODELO FINAL -----------------------------------------------------
 adult_final_lr_model <- adult_lr_model %>% fit(Status ~ ., adult)
 write_rds(adult_final_lr_model, "adult_final_lr_model.rds")
 
@@ -197,7 +197,7 @@ comparacao_de_modelos <- collect_predictions(adult_lr_last_fit) %>%
     roc = list(roc(Status, .pred_bad))
   ) 
 
-# KS no ggplot2 -------
+# KS no ggplot2
 densidade_acumulada <- adult_test_preds %>%
   ggplot(aes(x = .pred_bad, colour = Status)) +
   stat_ecdf(size = 1) +
@@ -213,7 +213,7 @@ densidade <- adult_test_preds %>%
 library(patchwork)
 densidade / densidade_acumulada
 
-# KS "na raça" ---------
+# KS "na raça" 
 ks_na_raca_df <- collect_predictions(adult_lr_last_fit) %>%
   mutate(modelo = "Regressao Logistica",
          pred_prob = .pred_bad) %>%
@@ -233,7 +233,7 @@ ks_na_raca_df %>%
   geom_line(size = 1) +
   theme_minimal() 
 
-# descobrindo onde acontece o máximo ------------
+# descobrindo onde acontece o máximo
 ks_na_raca_onde <- ks_na_raca_df %>%
   select(-n, -score_categ) %>%
   ungroup() %>%

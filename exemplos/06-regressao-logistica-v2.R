@@ -153,7 +153,7 @@ credit_test_preds %>%
   geom_label(aes(label = scales::percent(p))) +
   geom_vline(xintercept = 1/percentis, colour = "red", linetype = "dashed", size = 1)
 
-# PASSO 7) MODELO FINAL -----------------------------------------------------
+# PASSO 8) MODELO FINAL -----------------------------------------------------
 credit_final_lr_model <- credit_lr_model %>% fit(Status ~ ., credit_data)
 
 
