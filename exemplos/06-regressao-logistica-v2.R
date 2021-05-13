@@ -15,6 +15,13 @@ glimpse(credit_data) # German Risk
 
 credit_data %>% count(Status)
 
+
+multinom_reg()
+
+nearest_neighbor()
+
+parsnip::
+
 # PASSO 1) BASE TREINO/TESTE -----------------------------------------------
 set.seed(1)
 credit_initial_split <- initial_split(credit_data, strata = "Status", prop = 0.75)
@@ -27,6 +34,15 @@ credit_test  <- testing(credit_initial_split)
 ## veremos mais pra frente!
 
 skimr::skim(credit_train)
+
+credit_train %>%
+  count(Status, Job) %>%
+  ggplot(aes(y = Job, x = n, fill = Status)) +
+  geom_col(position = "fill")
+
+credit_train %>%
+  ggplot(aes(x = Seniority, colour = Status)) +
+  stat_ecdf() # KS
 
 # PASSO 3) DATAPREP --------------------------------------------------------
 
@@ -75,7 +91,7 @@ credit_lr_tune_grid <- tune_grid(
     # kap # KAPPA 
   )
 )
-
+autoplot(credit_lr_tune_grid)
 # minha versão do autoplot()
 collect_metrics(credit_lr_tune_grid)
 
@@ -91,11 +107,10 @@ collect_metrics(credit_lr_tune_grid) %>%
 # b) finaliza o modelo inicial com finalize_model()
 # c) ajusta o modelo final com todos os dados de treino (bases de validação já era)
 credit_lr_best_params <- select_best(credit_lr_tune_grid, "roc_auc")
-credit_lr_model <- credit_lr_model %>% finalize_model(credit_lr_best_params)
+credit_lr_model <- credit_wf %>% finalize_workflow(credit_lr_best_params)
 
 credit_lr_last_fit <- last_fit(
   credit_lr_model,
-  Status ~ .,
   credit_initial_split
 )
 
@@ -105,7 +120,7 @@ vip(credit_lr_last_fit_model)
 
 # PASSO 7) GUARDA TUDO ---------------------------------------------------------
 write_rds(credit_lr_last_fit, "credit_lr_last_fit.rds")
-write_rds(credit_lr_model, "credit_lr_model.rds")
+write_rds(credit_lr_last_fit_model, "credit_lr_model.rds")
 
 collect_metrics(credit_lr_last_fit)
 
