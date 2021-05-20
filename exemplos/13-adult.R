@@ -10,7 +10,9 @@ library(skimr)
 library(naniar)
 
 # PASSO 0) CARREGAR AS BASES -----------------------------------------------
-httr::GET("https://github.com/curso-r/main-intro-ml/raw/master/dados/adult.rds", httr::write_disk("adult.rds", overwrite = TRUE))
+httr::GET("https://github.com/curso-r/main-intro-ml/raw/master/dados/adult.rds",
+          httr::write_disk("adult.rds", overwrite = TRUE))
+
 adult <- read_rds("adult.rds")
 help(adult)
 glimpse(adult) # German Risk 
@@ -19,18 +21,16 @@ adult %>% count(resposta)
 
 # PASSO 1) BASE TREINO/TESTE -----------------------------------------------
 set.seed(1)
-adult_initial_split <- initial_split(adult, strata = "resposta", p = 0.75)
+adult_initial_split <- initial_split(adult, strata = "resposta", prop = 0.75)
 
 adult_train <- training(adult_initial_split)
 adult_test  <- testing(adult_initial_split)
 
 # PASSO 2) EXPLORAR A BASE -------------------------------------------------
 
-prep(adult_recipe)
-glimpse(juice(prep(adult_recipe)))
-# vis_miss(adult)
-# skim(adult)
-# GGally::ggpairs(adult_train %>% select(where(is.numeric)) %>% mutate_all(log))
+vis_miss(adult)
+skim(adult)
+GGally::ggpairs(adult_train %>% select(where(is.numeric)) %>% mutate_all(log))
 # adult %>% 
 #   filter(Assets > 100) %>%
 #   select(where(is.numeric), resposta, Records) %>%
@@ -44,11 +44,13 @@ glimpse(juice(prep(adult_recipe)))
 
 # PASSO 3) DATAPREP --------------------------------------------------------
 adult_receita <- recipe(resposta ~ ., data = adult_train) %>%
-  step_modeimpute(workclass, occupation, native_country) %>%
+  step_impute_mode(workclass, occupation, native_country) %>%
   step_zv(all_predictors()) %>%
   step_novel(all_nominal(), -all_outcomes()) %>%
   step_dummy(all_nominal(), -all_outcomes())
 
+#prep(adult_recipe)
+#glimpse(juice(prep(adult_recipe)))
 
 # juice(prep(adult_receita))
 
@@ -63,8 +65,13 @@ adult_lr_model <- logistic_reg(penalty = tune(), mixture = 1) %>%
   set_mode("classification") %>%
   set_engine("glmnet")
 
-
-
+# adult_rf_model <- rand_forest(mtry = tune(), trees = 50) %>%
+#   set_mode("classification") %>%
+#   set_engine("ranger")
+# 
+# adult_xgb_model <- xgb_train(max_depth = tune(), colsample_bytree = tune()) %>%
+#   set_mode("classification") %>%
+#   set_engine("glmnet")
 
 # workflow ----------------------------------------------------------------
 adult_wf <- workflow() %>%
@@ -78,16 +85,21 @@ adult_wf <- workflow() %>%
 # c) tune_grid()
 # d) escolha das métricas (rmse, roc_auc, etc)
 # d) collect_metrics() ou autoplot() para ver o resultado
+
 adult_resamples <- vfold_cv(adult_train, v = 5)
 
 adult_lr_tune_grid <- tune_grid(
   adult_wf,
   resamples = adult_resamples,
-  metrics = metric_set(roc_auc)
+  #control = tune::control_grid(verbose = TRUE),
+  grid = 10,
+  metrics = metric_set(roc_auc, kap)
 )
 
 # minha versão do autoplot()
 collect_metrics(adult_lr_tune_grid)
+
+autoplot(adult_lr_tune_grid)
 
 collect_metrics(adult_lr_tune_grid) %>%
   filter(penalty < 00.01) %>%
