@@ -91,7 +91,7 @@ diamondsinho_com_previsao_g3 <- diamondsinho_com_previsao %>%
   ggtitle("Ajustado vs Resíduo")
 
 # Resumo do ajuste do modelo
-
+library(patchwork)
 pw1 <- (diamondsinho_com_previsao_g1 + diamondsinho_com_previsao_g2) / (diamondsinho_com_previsao_g3)
 
 ############################################################################
@@ -181,3 +181,4 @@ pw2 <- (diamondsinho_novos_com_previsao_g1 + diamondsinho_novos_com_previsao_g2 
 
 # grafico de comparação
 pw1 / pw2
+

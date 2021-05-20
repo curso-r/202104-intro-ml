@@ -15,9 +15,16 @@ glimpse(credit_data) # German Risk
 
 credit_data %>% count(Status)
 
+
+multinom_reg()
+
+nearest_neighbor()
+
+parsnip::
+
 # PASSO 1) BASE TREINO/TESTE -----------------------------------------------
 set.seed(1)
-credit_initial_split <- initial_split(credit_data, strata = "Status", p = 0.75)
+credit_initial_split <- initial_split(credit_data, strata = "Status", prop = 0.75)
 
 credit_train <- training(credit_initial_split)
 credit_test  <- testing(credit_initial_split)
@@ -27,6 +34,15 @@ credit_test  <- testing(credit_initial_split)
 ## veremos mais pra frente!
 
 skimr::skim(credit_train)
+
+credit_train %>%
+  count(Status, Job) %>%
+  ggplot(aes(y = Job, x = n, fill = Status)) +
+  geom_col(position = "fill")
+
+credit_train %>%
+  ggplot(aes(x = Seniority, colour = Status)) +
+  stat_ecdf() # KS
 
 # PASSO 3) DATAPREP --------------------------------------------------------
 
@@ -50,7 +66,9 @@ credit_lr_model <- logistic_reg(penalty = tune(), mixture = 1) %>%
   set_mode("classification") %>%
   set_engine("glmnet")
 
-credit_wf <- workflow() %>% add_model(credit_lr_model) %>% add_recipe(credit_recipe)
+credit_wf <- workflow() %>% 
+  add_model(credit_lr_model) %>% 
+  add_recipe(credit_recipe)
 
 # PASSO 5) TUNAGEM DE HIPERPARÂMETROS --------------------------------------
 # a) bases de reamostragem para validação: vfold_cv()
@@ -65,15 +83,15 @@ credit_lr_tune_grid <- tune_grid(
   resamples = credit_resamples,
   metrics = metric_set(
     accuracy, 
-    kap, # KAPPA 
-    roc_auc, 
-    precision, 
-    recall, 
-    f_meas, 
-    mn_log_loss #binary cross entropy
+    roc_auc
+    # precision, 
+    # recall, 
+    # f_meas, 
+    # mn_log_loss, #binary cross entropy
+    # kap # KAPPA 
   )
 )
-
+autoplot(credit_lr_tune_grid)
 # minha versão do autoplot()
 collect_metrics(credit_lr_tune_grid)
 
@@ -89,11 +107,10 @@ collect_metrics(credit_lr_tune_grid) %>%
 # b) finaliza o modelo inicial com finalize_model()
 # c) ajusta o modelo final com todos os dados de treino (bases de validação já era)
 credit_lr_best_params <- select_best(credit_lr_tune_grid, "roc_auc")
-credit_lr_model <- credit_lr_model %>% finalize_model(credit_lr_best_params)
+credit_lr_model <- credit_wf %>% finalize_workflow(credit_lr_best_params)
 
 credit_lr_last_fit <- last_fit(
   credit_lr_model,
-  Status ~ .,
   credit_initial_split
 )
 
@@ -103,11 +120,11 @@ vip(credit_lr_last_fit_model)
 
 # PASSO 7) GUARDA TUDO ---------------------------------------------------------
 write_rds(credit_lr_last_fit, "credit_lr_last_fit.rds")
-write_rds(credit_lr_model, "credit_lr_model.rds")
+write_rds(credit_lr_last_fit_model, "credit_lr_model.rds")
 
 collect_metrics(credit_lr_last_fit)
 
-credit_test_preds <- credit_lr_last_fit$.predictions[[1]]
+credit_test_preds <- collect_predictions(credit_lr_last_fit)
 
 # roc
 credit_roc_curve <- credit_test_preds %>% roc_curve(Status, .pred_bad)
@@ -151,7 +168,7 @@ credit_test_preds %>%
   geom_label(aes(label = scales::percent(p))) +
   geom_vline(xintercept = 1/percentis, colour = "red", linetype = "dashed", size = 1)
 
-# PASSO 7) MODELO FINAL -----------------------------------------------------
+# PASSO 8) MODELO FINAL -----------------------------------------------------
 credit_final_lr_model <- credit_lr_model %>% fit(Status ~ ., credit_data)
 
 
