@@ -17,14 +17,23 @@ adult <- read_rds("adult.rds")
 help(adult)
 glimpse(adult) # German Risk 
 
-adult %>% count(resposta)
+adult %>% count(resposta) %>% 
+  mutate(p = n/sum(n))
 
 # PASSO 1) BASE TREINO/TESTE -----------------------------------------------
 set.seed(1)
-adult_initial_split <- initial_split(adult, strata = "resposta", prop = 0.75)
 
-adult_train <- training(adult_initial_split)
-adult_test  <- testing(adult_initial_split)
+adult %>% 
+  mutate(
+    grupo = c(rep(1:4, each = n()/4), 1)
+  )
+
+adult_initial_split <- rsample::initial_time_split()
+
+adult_train <- adult_initial_split$splits[[1]]
+
+adult_test  <- adult_initial_split %>% 
+  filter(id != "Fold01")
 
 # PASSO 2) EXPLORAR A BASE -------------------------------------------------
 
@@ -40,17 +49,22 @@ GGally::ggpairs(adult_train %>% select(where(is.numeric)) %>% mutate_all(log))
 #   facet_wrap(~name, scales = "free_y") +
 #   scale_y_log10()
 # 
-# GGally::ggpairs(adult %>% select(where(~!is.numeric(.))))
+# GGally::ggpairs(adult %>% select(c("workclass", "marital_status", "occupation", "relationship", 
+#                                     "race", "sex", "resposta")))
 
 # PASSO 3) DATAPREP --------------------------------------------------------
 adult_receita <- recipe(resposta ~ ., data = adult_train) %>%
+  step_rm(id) %>% 
   step_impute_mode(workclass, occupation, native_country) %>%
+  #step_impute_knn() +
+  step_log(all_numeric()) %>% 
+  step_normalize(all_numeric()) %>% 
   step_zv(all_predictors()) %>%
   step_novel(all_nominal(), -all_outcomes()) %>%
-  step_dummy(all_nominal(), -all_outcomes())
+  step_dummy(all_nominal(), -all_outcomes()) 
 
-#prep(adult_recipe)
-#glimpse(juice(prep(adult_recipe)))
+#prep(adult_receita) -> receita_preparada
+glimpse(juice(receita_preparada))
 
 # juice(prep(adult_receita))
 
@@ -61,6 +75,7 @@ adult_receita <- recipe(resposta ~ ., data = adult_train) %>%
 # c) hiperparametros para tunar: penalty = tune()
 # d) hiperparametros para não tunar: mixture = 1 # LASSO
 # e) o motor: glmnet
+
 adult_lr_model <- logistic_reg(penalty = tune(), mixture = 1) %>%
   set_mode("classification") %>%
   set_engine("glmnet")
@@ -71,7 +86,7 @@ adult_lr_model <- logistic_reg(penalty = tune(), mixture = 1) %>%
 # 
 # adult_xgb_model <- xgb_train(max_depth = tune(), colsample_bytree = tune()) %>%
 #   set_mode("classification") %>%
-#   set_engine("glmnet")
+#   set_engine("XGB")
 
 # workflow ----------------------------------------------------------------
 adult_wf <- workflow() %>%
@@ -91,9 +106,8 @@ adult_resamples <- vfold_cv(adult_train, v = 5)
 adult_lr_tune_grid <- tune_grid(
   adult_wf,
   resamples = adult_resamples,
-  #control = tune::control_grid(verbose = TRUE),
-  grid = 10,
-  metrics = metric_set(roc_auc, kap)
+  control = control_grid(verbose = TRUE),
+  metrics = metric_set(roc_auc, kap, ppv, recall) 
 )
 
 # minha versão do autoplot()
@@ -107,7 +121,7 @@ collect_metrics(adult_lr_tune_grid) %>%
   geom_point() +
   geom_errorbar(aes(ymin = mean - std_err, ymax = mean + std_err)) +
   facet_wrap(~.metric, scales = "free") +
-  scale_x_log10()
+  scale_x_log10(labels = scales::comma)
 
 # PASSO 6) DESEMPENHO DO MODELO FINAL ------------------------------------------
 # a) extrai melhor modelo com select_best()
@@ -118,7 +132,7 @@ adult_wf <- adult_wf %>% finalize_workflow(adult_lr_best_params)
 
 adult_lr_last_fit <- last_fit(
   adult_wf,
-  adult_initial_split
+  adult_initial_split$splits[[1]]
 )
 
 # metricas
@@ -133,23 +147,46 @@ autoplot(adult_roc_curve)
 adult_lr_last_fit_model <- adult_lr_last_fit$.workflow[[1]]$fit$fit
 vip(adult_lr_last_fit_model)
 
+# Importancia geral das variaveis
+vi(adult_lr_last_fit_model) %>%
+  mutate(Variable = fct_reorder(Variable, Importance)) %>% 
+  ggplot(aes(x = Variable, y = Importance, fill = Sign)) + 
+  geom_col() + 
+  coord_flip()
+
+# Importancia só das continuas
+vi(adult_lr_last_fit_model) %>%
+  filter(Variable %in% c("age", "fnlwgt", "education_num", "hous_per_week")) %>% 
+  mutate(Variable = fct_reorder(Variable, Importance)) %>% 
+  ggplot(aes(x = Variable, y = Importance, fill = Sign)) + 
+  geom_col() + 
+  coord_flip()
 
 # confusion matrix
 adult_test_preds %>%
   mutate(
-    resposta_class = factor(if_else(`.pred_<=50K` > 0.6, "<=50K", ">50K"))
+    resposta_class = factor(if_else(`.pred_<=50K` > 0.5, "<=50K", ">50K"))
   ) %>%
   conf_mat(resposta, resposta_class)
 
+adult_test_preds %>%
+  mutate(
+    resposta_class = factor(if_else(`.pred_<=50K` > 0.5, "<=50K", ">50K"))
+  ) %>% 
+  with(
+    sum(resposta_class == resposta)/nrow(.)
+  )
 
 # PASSO 9: MODELO FINAL ------------------------------------------------------------
 adult_modelo_final <- adult_wf %>% fit(adult)
 
+broom::tidy(adult_modelo_final)
+
 # PASSO 8: ESCORA BASE DE VALIDACAO ------------------------------------------------
 # PASSO 0) CARREGAR AS BASES -----------------------------------------------
+
 httr::GET("https://github.com/curso-r/main-intro-ml/raw/master/dados/adult_val.rds", httr::write_disk("adult_val.rds", overwrite = TRUE))
 adult_val <- read_rds("adult_val.rds")
-
 
 adult_val_sumbissao <- adult_val %>%
   mutate(

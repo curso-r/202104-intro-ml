@@ -208,6 +208,5 @@ class: middle, center
 - A gravação das aulas ficará disponível no Google Classroom por 1 ano após o final do curso.
 
 - Caso você tenha dúvidas fora da aula, pode postá-la no nosso fórum discourse.curso-r.com. Fazendo isso você ajuda a comunidade, pois sua dúvida fica pública para outras pessoas que precisem da mesma ajuda. Além disso, você também se beneficia do conhecimento de todas as pessoas que compõem a nossa comunidade e podem te dar conselhos muito valiosos. 
-
 - Mantenha o seu microfone sempre mutado. Alguns ruídos comuns podem atrapalhar o andamento da aula.
     - Caso você queira fazer uma pergunta, sinta-se a vontade para colocá-la no chat ou use a função "levantar a mão" do Zoom.

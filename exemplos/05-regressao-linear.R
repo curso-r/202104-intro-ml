@@ -55,7 +55,10 @@ auto_recipe <- recipe(mpg ~ ., data = auto_train) %>%
   step_dummy(all_nominal()) %>%
   step_zv(all_predictors())
 
-prep(auto_recipe)
+receita_treinada <- prep(auto_recipe)
+
+juice(receita_treinada)
+
 juice(prep(auto_recipe))
 
 # definicao do modelo -----------------------------------------------------
